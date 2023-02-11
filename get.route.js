@@ -23,6 +23,8 @@ var getChats = function (req, res) {
     // http://localhost:9000/api/chats/v1/5033f88772:83ac211947/?offset=5&limit=7
     var chatId = req.params.chatId;
     var _a = req.query, offset = _a.offset, limit = _a.limit;
+    if (!offset || !offset || !limit)
+        return res.status(200).json({ payload: null });
     // const offset = 2;
     // const limit = offset + 3;
     // const arr = [10,20,30,40,50,60,70,80,90];

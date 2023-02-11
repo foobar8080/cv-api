@@ -1,11 +1,11 @@
 /* eslint-disable curly */
 
-import { Request, Response } from 'express';
-import { ME } from './db';
-import { RELATIONS } from './db';
-import { USERS } from './db';
-import { CHATS } from './db';
-import { CAPSULE_LIST } from './db';
+import { Request, Response } from "express";
+import { ME } from "./db";
+import { RELATIONS } from "./db";
+import { USERS } from "./db";
+import { CHATS } from "./db";
+import { CAPSULE_LIST } from "./db";
 
 export const getMe = (req: Request, res: Response) => {
   res.status(200).json({ payload: ME });
@@ -24,6 +24,9 @@ export const getChats = (req: Request, res: Response) => {
 
   const { chatId } = req.params;
   const { offset, limit } = req.query;
+
+  if (!offset || !offset || !limit)
+    return res.status(200).json({ payload: null });
 
   // const offset = 2;
   // const limit = offset + 3;

@@ -1,11 +1,12 @@
 /* eslint-disable curly */
 
-import { Request, Response } from "express";
-import { ME } from "./db";
-import { RELATIONS } from "./db";
-import { USERS } from "./db";
-import { CHATS } from "./db";
-import { CAPSULE_LIST } from "./db";
+import { Request, Response } from 'express';
+import { ME } from './db';
+import { RELATIONS } from './db';
+import { USERS } from './db';
+import { CHATS } from './db-2';
+import { CAPSULE_LIST } from './db';
+import { LIVE_CHAT } from './db-2';
 
 export const getMe = (req: Request, res: Response) => {
   res.status(200).json({ payload: ME });
@@ -41,7 +42,8 @@ export const getChats = (req: Request, res: Response) => {
       CHATS[chatId]?.messages
         ?.slice()
         ?.reverse()
-        ?.slice(+offset, +offset + +limit) || [];
+        ?.slice(+offset, +offset + +limit)
+        .reverse() || [];
 
     res.status(200).json({ payload: messages });
   }, time);
@@ -49,4 +51,8 @@ export const getChats = (req: Request, res: Response) => {
 
 export const getCapsuleList = (req: Request, res: Response) => {
   res.status(200).json({ payload: CAPSULE_LIST });
+};
+
+export const getLiveChat = (req: Request, res: Response) => {
+  res.status(200).json({ payload: LIVE_CHAT });
 };

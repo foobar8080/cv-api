@@ -1,12 +1,13 @@
 "use strict";
 /* eslint-disable curly */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCapsuleList = exports.getChats = exports.getUsers = exports.getRelations = exports.getMe = void 0;
+exports.getLiveChat = exports.getCapsuleList = exports.getChats = exports.getUsers = exports.getRelations = exports.getMe = void 0;
 var db_1 = require("./db");
 var db_2 = require("./db");
 var db_3 = require("./db");
+var db_2_1 = require("./db-2");
 var db_4 = require("./db");
-var db_5 = require("./db");
+var db_2_2 = require("./db-2");
 var getMe = function (req, res) {
     res.status(200).json({ payload: db_1.ME });
 };
@@ -34,12 +35,16 @@ var getChats = function (req, res) {
         time = 1000;
     setTimeout(function () {
         var _a, _b, _c, _d;
-        var messages = ((_d = (_c = (_b = (_a = db_4.CHATS[chatId]) === null || _a === void 0 ? void 0 : _a.messages) === null || _b === void 0 ? void 0 : _b.slice()) === null || _c === void 0 ? void 0 : _c.reverse()) === null || _d === void 0 ? void 0 : _d.slice(+offset, +offset + +limit)) || [];
+        var messages = ((_d = (_c = (_b = (_a = db_2_1.CHATS[chatId]) === null || _a === void 0 ? void 0 : _a.messages) === null || _b === void 0 ? void 0 : _b.slice()) === null || _c === void 0 ? void 0 : _c.reverse()) === null || _d === void 0 ? void 0 : _d.slice(+offset, +offset + +limit).reverse()) || [];
         res.status(200).json({ payload: messages });
     }, time);
 };
 exports.getChats = getChats;
 var getCapsuleList = function (req, res) {
-    res.status(200).json({ payload: db_5.CAPSULE_LIST });
+    res.status(200).json({ payload: db_4.CAPSULE_LIST });
 };
 exports.getCapsuleList = getCapsuleList;
+var getLiveChat = function (req, res) {
+    res.status(200).json({ payload: db_2_2.LIVE_CHAT });
+};
+exports.getLiveChat = getLiveChat;

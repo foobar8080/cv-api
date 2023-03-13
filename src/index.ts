@@ -10,7 +10,20 @@ import {
 } from "./get.route";
 
 const app = express();
-app.use(cors({ origin: "https://capsuleverse-test.web.app/" }));
+
+const allowedOrigins = ["https://capsuleverse-test.web.app/"];
+
+const corsOptions = {
+  origin: function (origin: any, callback: any) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 app.route("/api/capsule-list/v1").get(getCapsuleList);
 app.route("/api/me/v1").get(getMe);

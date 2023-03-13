@@ -7,7 +7,18 @@ var cors = require("cors");
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var app = (0, express_1.default)();
-app.use(cors({ origin: "https://capsuleverse-test.web.app/" }));
+var allowedOrigins = ["https://capsuleverse-test.web.app/"];
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+};
+app.use(cors(corsOptions));
 app.route("/api/capsule-list/v1").get(get_route_1.getCapsuleList);
 app.route("/api/me/v1").get(get_route_1.getMe);
 app.route("/api/relations/v1").get(get_route_1.getRelations);

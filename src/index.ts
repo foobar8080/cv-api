@@ -11,7 +11,7 @@ import {
 
 const app = express();
 
-const allowedOrigins = ["https://capsuleverse-test.web.app/"];
+const allowedOrigins = ["https://capsuleverse-test.web.app"];
 
 const corsOptions = {
   origin: function (origin: any, callback: any) {
@@ -24,6 +24,16 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://capsuleverse-test.web.app"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.route("/api/capsule-list/v1").get(getCapsuleList);
 app.route("/api/me/v1").get(getMe);

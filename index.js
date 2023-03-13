@@ -7,22 +7,28 @@ var cors = require("cors");
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var app = (0, express_1.default)();
-var allowedOrigins = ["https://capsuleverse-test.web.app"];
-var corsOptions = {
-    origin: function (origin, callback) {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-};
-app.use(cors(corsOptions));
+// const allowedOrigins = ["https://capsuleverse-test.web.app"];
+// const corsOptions = {
+//   origin: function (origin: any, callback: any) {
+//     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
+// app.use(cors(corsOptions));
 app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "https://capsuleverse-test.web.app");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    var allowedOrigins = ["https://capsuleverse-test.web.app"];
+    var origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    }
+    else {
+        res.status(403).send("Access Forbidden");
+    }
     next();
 });
 app.route("/api/capsule-list/v1").get(get_route_1.getCapsuleList);

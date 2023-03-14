@@ -84,7 +84,8 @@ const app = express();
 // );
 
 app.get("/", (req, res) => {
-  res.send(req.ip);
+  const clientIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  res.send(clientIP);
 });
 
 app.route("/api/capsule-list/v1").get(getCapsuleList);

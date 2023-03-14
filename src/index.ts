@@ -37,6 +37,8 @@ const app = express();
 //   }
 // });
 
+// -----------------------------
+
 // app.use((req, res, next) => {
 //   const apiKeys = ["1234"];
 //   const allowedOrigins = ["https://capsuleverse-test.web.app"];
@@ -60,6 +62,30 @@ const app = express();
 // app.post("/", (req: Request, res: Response, next: NextFunction) => {
 //   return res.send("hello");
 // });
+
+// -------------------------
+
+// // set up a whitelist of allowed origins
+// const whitelist = ["http://example.com"];
+
+// // use the cors middleware to only allow cross-origin requests from the whitelist
+// app.use(
+//   cors({
+//     origin: function (origin: any, callback: any) {
+//       console.log(777, origin);
+
+//       if (!origin || whitelist.indexOf(origin) !== -1) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//   })
+// );
+
+app.get("/", (req, res) => {
+  res.send(req.ip);
+});
 
 app.route("/api/capsule-list/v1").get(getCapsuleList);
 app.route("/api/me/v1").get(getMe);

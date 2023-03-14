@@ -7,30 +7,44 @@ var cors = require("cors");
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var app = (0, express_1.default)();
-// const allowedOrigins = ["https://capsuleverse-test.web.app"];
-// const corsOptions = {
-//   origin: function (origin: any, callback: any) {
-//     if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
-// app.use(cors(corsOptions));
 app.use(function (req, res, next) {
+    // Set allowed origins
     var allowedOrigins = ["https://capsuleverse-test.web.app"];
-    var origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header("Access-Control-Allow-Origin", origin);
-        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-        res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    // Get the request's origin header
+    var requestOrigin = req.headers.origin;
+    // Check if the request's origin is allowed
+    if (allowedOrigins.includes(requestOrigin)) {
+        // Set the response headers to allow the request's origin
+        res.setHeader("Access-Control-Allow-Origin", requestOrigin);
+        res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    }
+    // Handle preflight requests
+    if (req.method === "OPTIONS") {
+        res.sendStatus(200);
     }
     else {
-        res.status(403).send("Access Forbidden");
+        next();
     }
-    next();
 });
+// app.use((req, res, next) => {
+//   const apiKeys = ["1234"];
+//   const allowedOrigins = ["https://capsuleverse-test.web.app"];
+//   const origin = req.headers.origin as string;
+//   const referer = req.headers.referer as string;
+//   const apiKey = req.headers["x-api-key"] as string;
+//   if (
+//     allowedOrigins.includes(origin) &&
+//     referer?.startsWith(`${origin}/`) &&
+//     apiKeys.includes(apiKey)
+//   ) {
+//     res.header("Access-Control-Allow-Origin", origin);
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     next();
+//   }
+//   res.status(403).send("Access Forbidden");
+// });
 app.route("/api/capsule-list/v1").get(get_route_1.getCapsuleList);
 app.route("/api/me/v1").get(get_route_1.getMe);
 app.route("/api/relations/v1").get(get_route_1.getRelations);

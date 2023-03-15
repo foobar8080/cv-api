@@ -12,8 +12,6 @@ export const cors = (settings: ICorsSettings) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const origin: string | undefined = req.headers.origin;
 
-    res.setHeader("X-XXX", origin || "hello");
-
     if (origin && settings?.origins?.includes(origin)) {
       res.setHeader("Access-Control-Allow-Origin", origin);
 
@@ -44,12 +42,6 @@ export const cors = (settings: ICorsSettings) => {
     } else {
       return res.status(403).json({ error: "Forbidden" });
     }
-
-    // Handle preflight requests
-    if (req.method === "OPTIONS") {
-      return res.sendStatus(204);
-    } else {
-      next();
-    }
+    return next();
   };
 };

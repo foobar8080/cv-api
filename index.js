@@ -8,7 +8,7 @@ var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var dns = require("dns");
 var app = (0, express_1.default)();
-app.use(cors());
+app.use(cors({ origin: "https://capsuleverse-test.web.app/" }));
 // app.use((req, res, next) => {
 //   // Set allowed origins
 //   const allowedOrigins = ["https://capsuleverse-test.web.app"];
@@ -70,33 +70,43 @@ app.use(cors());
 //   })
 // );
 /*
-==================================
-Get IP address of the client site
-==================================
-
-This middleware is allowing unauthorized users to use the API only if they make a request to it from a client site
+=====================
+Blacklisted IP check
+=====================
+Checks the IP address of the incoming request against a list of blacklisted IP addresses.
 */
-app.use("/api/capsule-list/v1", function (req, res, next) {
-    var referer = req.headers.referer;
-    if (!referer)
-        return res.status(403).send("Forbidden");
-    var hostname = new URL(referer).hostname;
-    dns.resolve4(hostname, function (err, addresses) {
-        if (err || addresses.length === 0)
-            return res.status(403).send("Forbidden");
-        var clientIP = "199.36.158.100"; // IP of firebase client site
-        var clientIPCandidate = addresses[0];
-        if (clientIP !== clientIPCandidate)
-            return res.status(403).send("Forbidden");
-        next();
-    });
-});
+// const ipBlacklist = ["1.2.3.4", "5.6.7.8", "9.10.11.12"];
+// function blockIPs(req: Request, res: Response, next: NextFunction) {
+//   const ip = "client-public-ip";
+//   if (ipBlacklist.includes(ip)) return res.status(403).send("Forbidden");
+//   next();
+// }
+// app.use(blockIPs);
+// =====================
+// app.use("/api/capsule-list/v1", (req, res, next) => {
+//   /*
+//   ==================================
+//   Get IP address of the client site
+//   ==================================
+//   This middleware is allowing unauthorized users to use the API only if they make a request to it from a client site
+//   */
+//   const referer = req.headers.referer;
+//   if (!referer) return res.status(403).send("Forbidden");
+//   const hostname = new URL(referer).hostname;
+//   dns.resolve4(hostname, (err: any, addresses: any) => {
+//     if (err || addresses.length === 0) return res.status(403).send("Forbidden");
+//     const clientIP = "199.36.158.100"; // IP of firebase client site
+//     const clientIPCandidate = addresses[0];
+//     if (clientIP !== clientIPCandidate)
+//       return res.status(403).send("Forbidden");
+//     next();
+//   });
+// });
 app.get("/", function (req, res) {
     /*
     ===========================================
     Get public IP address of the client device
     ===========================================
-  
     We're using the req.headers['x-forwarded-for'] property to get the public IP address of the client device (it could also be the IP address of an intermediary proxy or load balancer).
     If this header is not present (i.e., if the request did not go through a proxy), we fall back to the req.socket.remoteAddress property, which should contain the IP address of the client device.
   

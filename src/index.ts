@@ -102,12 +102,14 @@ app.get("/2", (req, res) => {
   const referer = req.headers.referer as string;
   const hostname = new URL(referer).hostname;
 
-  dns.lookup(hostname, (err: any, address: any) => {
+  dns.resolve4(hostname, (err: any, addresses: any) => {
     if (err) {
       console.error(err);
+      res.status(400).send("Bad request");
       return;
     }
-    res.send(address);
+    console.log(`Client site IP address: ${addresses[0]}`);
+    // ...rest of your code
   });
 });
 

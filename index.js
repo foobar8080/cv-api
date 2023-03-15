@@ -83,12 +83,14 @@ app.get("/1", function (req, res) {
 app.get("/2", function (req, res) {
     var referer = req.headers.referer;
     var hostname = new URL(referer).hostname;
-    dns.lookup(hostname, function (err, address) {
+    dns.resolve4(hostname, function (err, addresses) {
         if (err) {
             console.error(err);
+            res.status(400).send("Bad request");
             return;
         }
-        res.send(address);
+        console.log("Client site IP address: ".concat(addresses[0]));
+        // ...rest of your code
     });
 });
 app.route("/api/capsule-list/v1").get(get_route_1.getCapsuleList);

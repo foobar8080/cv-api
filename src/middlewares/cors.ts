@@ -40,12 +40,12 @@ export const cors = (settings: ICorsSettings) => {
         res.setHeader("Access-Control-Max-Age", String(settings.maxAge));
       }
     } else {
-      res.status(403).json({ error: "Forbidden" });
+      return res.status(403).json({ error: "Forbidden" });
     }
 
     // Handle preflight requests
     if (req.method === "OPTIONS") {
-      res.sendStatus(204);
+      return res.sendStatus(204);
     } else {
       next();
     }

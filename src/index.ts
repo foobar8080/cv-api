@@ -86,35 +86,37 @@ app.use(cors());
 //   })
 // );
 
-app.use((req, res, next) => {
+/*
+==================================
+Get IP address of the client site
+==================================
+
+This middleware is allowing unauthorized users to use the API only if they make a request to it from a client site
+*/
+app.use("/api/capsule-list/v1", (req, res, next) => {
   const referer = req.headers.referer;
-  if (!referer) {
-    res.setHeader("Client-Site-IP", "unknown");
-    next();
-    return;
-  }
+  if (!referer) return res.status(403).send("Forbidden");
+
   const hostname = new URL(referer).hostname;
 
   dns.resolve4(hostname, (err: any, addresses: any) => {
-    if (err) {
-      console.error(err);
-      res.setHeader("Client-Site-IP", "unknown");
-      next();
-      return;
-    }
-    if (addresses.length === 0) {
-      res.setHeader("Client-Site-IP", "unknown");
-      next();
-      return;
-    }
-    const clientIP = addresses[0];
-    res.setHeader("Client-Site-IP", clientIP);
+    if (err || addresses.length === 0) return res.status(403).send("Forbidden");
+
+    const clientIP = "199.36.158.100"; // IP of firebase client site
+    const clientIPCandidate = addresses[0];
+    if (clientIP !== clientIPCandidate)
+      return res.status(403).send("Forbidden");
+
     next();
   });
 });
 
-app.get("/1", (req, res) => {
+app.get("/", (req, res) => {
   /*
+  ===========================================
+  Get public IP address of the client device
+  ===========================================
+
   We're using the req.headers['x-forwarded-for'] property to get the public IP address of the client device (it could also be the IP address of an intermediary proxy or load balancer). 
   If this header is not present (i.e., if the request did not go through a proxy), we fall back to the req.socket.remoteAddress property, which should contain the IP address of the client device.
 
@@ -126,21 +128,6 @@ app.get("/1", (req, res) => {
     req.headers["x-forwarded-for"] || req.socket.remoteAddress;
   res.send(clientPublicIP);
 });
-
-// app.get("/2", (req, res) => {
-//   const referer = req.headers.referer as string;
-//   const hostname = new URL(referer).hostname;
-
-//   dns.resolve4(hostname, (err: any, addresses: any) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(400).send("Bad request");
-//       return;
-//     }
-//     console.log(`Client site IP address: ${addresses[0]}`);
-//     // ...rest of your code
-//   });
-// });
 
 app.route("/api/capsule-list/v1").get(getCapsuleList);
 app.route("/api/me/v1").get(getMe);

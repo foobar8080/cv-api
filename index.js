@@ -8,7 +8,7 @@ var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var dns = require("dns");
 var app = (0, express_1.default)();
-app.use(cors({ origin: "https://capsuleverse-test.web.app/" }));
+app.use(cors({ origin: "https://capsuleverse-test.web.app" }));
 // app.use((req, res, next) => {
 //   // Set allowed origins
 //   const allowedOrigins = ["https://capsuleverse-test.web.app"];

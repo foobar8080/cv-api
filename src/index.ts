@@ -12,7 +12,7 @@ const dns = require("dns");
 
 const app = express();
 
-app.use(cors({ origin: "https://capsuleverse-test.web.app/" }));
+app.use(cors({ origin: "https://capsuleverse-test.web.app" }));
 
 // app.use((req, res, next) => {
 //   // Set allowed origins

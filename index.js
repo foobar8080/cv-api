@@ -13,8 +13,8 @@ var app = (0, express_1.default)();
 // cors custom
 app.use((0, cors_1.cors)({
     origins: ["https://capsuleverse-test.web.app"],
-    methods: ["GET", "POST"],
-    headers: ["Content-Type"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    headers: ["Content-Type", "Authorization"],
     maxAge: 86400,
 }));
 // ===================== 1

@@ -19,8 +19,8 @@ const app = express();
 app.use(
   cors({
     origins: ["https://capsuleverse-test.web.app"],
-    methods: ["GET", "POST"],
-    headers: ["Content-Type"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    headers: ["Content-Type", "Authorization"],
     maxAge: 86400,
   })
 );

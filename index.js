@@ -8,6 +8,7 @@ var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var dns = require("dns");
 var app = (0, express_1.default)();
+app.use(cors());
 // app.use((req, res, next) => {
 //   // Set allowed origins
 //   const allowedOrigins = ["https://capsuleverse-test.web.app"];
@@ -68,6 +69,31 @@ var app = (0, express_1.default)();
 //     },
 //   })
 // );
+app.use(function (req, res, next) {
+    var referer = req.headers.referer;
+    if (!referer) {
+        res.setHeader("Client-Site-IP", "unknown");
+        next();
+        return;
+    }
+    var hostname = new URL(referer).hostname;
+    dns.resolve4(hostname, function (err, addresses) {
+        if (err) {
+            console.error(err);
+            res.setHeader("Client-Site-IP", "unknown");
+            next();
+            return;
+        }
+        if (addresses.length === 0) {
+            res.setHeader("Client-Site-IP", "unknown");
+            next();
+            return;
+        }
+        var clientIP = addresses[0];
+        res.setHeader("Client-Site-IP", clientIP);
+        next();
+    });
+});
 app.get("/1", function (req, res) {
     /*
     We're using the req.headers['x-forwarded-for'] property to get the public IP address of the client device (it could also be the IP address of an intermediary proxy or load balancer).
@@ -80,19 +106,19 @@ app.get("/1", function (req, res) {
     var clientPublicIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
     res.send(clientPublicIP);
 });
-app.get("/2", function (req, res) {
-    var referer = req.headers.referer;
-    var hostname = new URL(referer).hostname;
-    dns.resolve4(hostname, function (err, addresses) {
-        if (err) {
-            console.error(err);
-            res.status(400).send("Bad request");
-            return;
-        }
-        console.log("Client site IP address: ".concat(addresses[0]));
-        // ...rest of your code
-    });
-});
+// app.get("/2", (req, res) => {
+//   const referer = req.headers.referer as string;
+//   const hostname = new URL(referer).hostname;
+//   dns.resolve4(hostname, (err: any, addresses: any) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(400).send("Bad request");
+//       return;
+//     }
+//     console.log(`Client site IP address: ${addresses[0]}`);
+//     // ...rest of your code
+//   });
+// });
 app.route("/api/capsule-list/v1").get(get_route_1.getCapsuleList);
 app.route("/api/me/v1").get(get_route_1.getMe);
 app.route("/api/relations/v1").get(get_route_1.getRelations);

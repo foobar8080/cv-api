@@ -12,6 +12,8 @@ const dns = require("dns");
 
 const app = express();
 
+app.use(cors());
+
 // app.use((req, res, next) => {
 //   // Set allowed origins
 //   const allowedOrigins = ["https://capsuleverse-test.web.app"];
@@ -84,6 +86,33 @@ const app = express();
 //   })
 // );
 
+app.use((req, res, next) => {
+  const referer = req.headers.referer;
+  if (!referer) {
+    res.setHeader("Client-Site-IP", "unknown");
+    next();
+    return;
+  }
+  const hostname = new URL(referer).hostname;
+
+  dns.resolve4(hostname, (err: any, addresses: any) => {
+    if (err) {
+      console.error(err);
+      res.setHeader("Client-Site-IP", "unknown");
+      next();
+      return;
+    }
+    if (addresses.length === 0) {
+      res.setHeader("Client-Site-IP", "unknown");
+      next();
+      return;
+    }
+    const clientIP = addresses[0];
+    res.setHeader("Client-Site-IP", clientIP);
+    next();
+  });
+});
+
 app.get("/1", (req, res) => {
   /*
   We're using the req.headers['x-forwarded-for'] property to get the public IP address of the client device (it could also be the IP address of an intermediary proxy or load balancer). 
@@ -98,20 +127,20 @@ app.get("/1", (req, res) => {
   res.send(clientPublicIP);
 });
 
-app.get("/2", (req, res) => {
-  const referer = req.headers.referer as string;
-  const hostname = new URL(referer).hostname;
+// app.get("/2", (req, res) => {
+//   const referer = req.headers.referer as string;
+//   const hostname = new URL(referer).hostname;
 
-  dns.resolve4(hostname, (err: any, addresses: any) => {
-    if (err) {
-      console.error(err);
-      res.status(400).send("Bad request");
-      return;
-    }
-    console.log(`Client site IP address: ${addresses[0]}`);
-    // ...rest of your code
-  });
-});
+//   dns.resolve4(hostname, (err: any, addresses: any) => {
+//     if (err) {
+//       console.error(err);
+//       res.status(400).send("Bad request");
+//       return;
+//     }
+//     console.log(`Client site IP address: ${addresses[0]}`);
+//     // ...rest of your code
+//   });
+// });
 
 app.route("/api/capsule-list/v1").get(getCapsuleList);
 app.route("/api/me/v1").get(getMe);

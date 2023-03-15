@@ -12,6 +12,8 @@ export const cors = (settings: ICorsSettings) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const origin: string | undefined = req.headers.origin;
 
+    res.setHeader("X-XXX", origin || "hello");
+
     if (origin && settings?.origins?.includes(origin)) {
       res.setHeader("Access-Control-Allow-Origin", origin);
 

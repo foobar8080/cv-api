@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var cors = require("cors");
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
+var dns = require("dns");
 var app = (0, express_1.default)();
 // app.use((req, res, next) => {
 //   // Set allowed origins
@@ -67,9 +68,28 @@ var app = (0, express_1.default)();
 //     },
 //   })
 // );
-app.get("/", function (req, res) {
-    var clientIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-    res.send(clientIP);
+app.get("/1", function (req, res) {
+    /*
+    We're using the req.headers['x-forwarded-for'] property to get the public IP address of the client device (it could also be the IP address of an intermediary proxy or load balancer).
+    If this header is not present (i.e., if the request did not go through a proxy), we fall back to the req.socket.remoteAddress property, which should contain the IP address of the client device.
+  
+    Note that the x-forwarded-for header can contain multiple IP addresses if the request passed through multiple proxies, so you may need to extract the first IP address from the list to get the actual client IP address.
+  
+    Also, keep in mind that relying on the x-forwarded-for header for security-critical applications can be risky, as it can be spoofed by malicious users. Therefore, you should always validate and sanitize user input based on this header.
+    */
+    var clientPublicIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    res.send(clientPublicIP);
+});
+app.get("/2", function (req, res) {
+    var referer = req.headers.referer;
+    var hostname = new URL(referer).hostname;
+    dns.lookup(hostname, function (err, address) {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        res.send(address);
+    });
 });
 app.route("/api/capsule-list/v1").get(get_route_1.getCapsuleList);
 app.route("/api/me/v1").get(get_route_1.getMe);

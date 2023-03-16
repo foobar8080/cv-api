@@ -11,7 +11,7 @@ var app = (0, express_1.default)();
 // CORS settings
 var origins = [
     "https://capsuleverse.com",
-    "https://capsuleverse-test1.web.app",
+    "https://capsuleverse-test.web.app",
 ];
 app.use(cors({ origins: origins }));
 // Allow unauthorized users to use this route only if they make a request to it from a client site

@@ -17,7 +17,7 @@ const app = express();
 
 const origins = [
   "https://capsuleverse.com",
-  "https://capsuleverse-test1.web.app",
+  "https://capsuleverse-test.web.app",
 ];
 app.use(cors({ origins }));
 

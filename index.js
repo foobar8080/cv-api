@@ -10,15 +10,15 @@ var cors = require("cors");
 var app = (0, express_1.default)();
 // cors package
 app.use(cors());
-// cors custom
-// app.use(
-//   cors({
-//     origins: ["https://capsuleverse-test.web.app"],
-//     methods: ["GET", "POST"],
-//     headers: ["Content-Type"],
-//     maxAge: 86400,
-//   })
-// );
+// const origins = ["https://capsuleverse.com"];
+var origins = ["https://capsuleverse-test.web.app"];
+app.get("/api/capsule-list/v1", function (req, res, next) {
+    var origin = req.headers.origin;
+    if (!origin || !origins.includes(origin)) {
+        return res.status(403).send("Forbidden");
+    }
+    next();
+});
 // ===================== 1
 /*
 =====================

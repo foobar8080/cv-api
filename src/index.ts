@@ -7,23 +7,23 @@ import {
   getUsers,
   getLiveChat,
 } from "./get.route";
-// const cors = require("cors");
-import { cors } from "./middlewares/cors";
+const cors = require("cors");
+// import { cors } from "./middlewares/cors";
 
 const app = express();
 
 // cors package
-// app.use(cors());
+app.use(cors());
 
 // cors custom
-app.use(
-  cors({
-    origins: ["https://capsuleverse-test.web.app"],
-    methods: ["GET", "POST"],
-    headers: ["Content-Type"],
-    maxAge: 86400,
-  })
-);
+// app.use(
+//   cors({
+//     origins: ["https://capsuleverse-test.web.app"],
+//     methods: ["GET", "POST"],
+//     headers: ["Content-Type"],
+//     maxAge: 86400,
+//   })
+// );
 
 // ===================== 1
 

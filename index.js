@@ -5,18 +5,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
-// const cors = require("cors");
-var cors_1 = require("./middlewares/cors");
+var cors = require("cors");
+// import { cors } from "./middlewares/cors";
 var app = (0, express_1.default)();
 // cors package
-// app.use(cors());
+app.use(cors());
 // cors custom
-app.use((0, cors_1.cors)({
-    origins: ["https://capsuleverse-test.web.app"],
-    methods: ["GET", "POST"],
-    headers: ["Content-Type"],
-    maxAge: 86400,
-}));
+// app.use(
+//   cors({
+//     origins: ["https://capsuleverse-test.web.app"],
+//     methods: ["GET", "POST"],
+//     headers: ["Content-Type"],
+//     maxAge: 86400,
+//   })
+// );
 // ===================== 1
 /*
 =====================

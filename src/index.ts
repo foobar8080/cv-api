@@ -15,6 +15,7 @@ const origins = [
   "https://capsuleverse.com",
   "https://capsuleverse-test.web.app",
 ];
+app.options("*", cors({ origins })); // include before other routes
 app.use(cors({ origins }));
 
 app.get("/api/capsule-list/v1", function (req, res, next) {

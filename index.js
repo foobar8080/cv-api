@@ -7,12 +7,14 @@ var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var cors = require("cors");
 var app = (0, express_1.default)();
+// ===================== 0
+// CORS settings
 var origins = [
     "https://capsuleverse.com",
-    "https://capsuleverse-test.web.app",
+    "https://capsuleverse-test1.web.app",
 ];
-app.options("*", cors()); // include before other routes
 app.use(cors({ origins: origins }));
+// Allow unauthorized users to use this route only if they make a request to it from a client site
 app.get("/api/capsule-list/v1", function (req, res, next) {
     var origin = req.headers.origin;
     if (!origin || !origins.includes(origin)) {

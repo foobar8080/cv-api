@@ -11,12 +11,17 @@ const cors = require("cors");
 
 const app = express();
 
+// ===================== 0
+
+// CORS settings
+
 const origins = [
   "https://capsuleverse.com",
-  "https://capsuleverse-test.web.app",
+  "https://capsuleverse-test1.web.app",
 ];
-app.options("*", cors()); // include before other routes
 app.use(cors({ origins }));
+
+// Allow unauthorized users to use this route only if they make a request to it from a client site
 
 app.get("/api/capsule-list/v1", function (req, res, next) {
   const origin = req.headers.origin;

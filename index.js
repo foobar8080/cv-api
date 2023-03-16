@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
 var cors = require("cors");
-// import { cors } from "./middlewares/cors";
 var app = (0, express_1.default)();
-// cors package
-app.use(cors());
-// const origins = ["https://capsuleverse.com"];
-var origins = ["https://capsuleverse-test.web.app"];
+var origins = [
+    "https://capsuleverse.com",
+    "https://capsuleverse-test.web.app",
+];
+app.use(cors({ origins: origins }));
 app.get("/api/capsule-list/v1", function (req, res, next) {
     var origin = req.headers.origin;
     if (!origin || !origins.includes(origin)) {

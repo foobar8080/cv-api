@@ -8,15 +8,14 @@ import {
   getLiveChat,
 } from "./get.route";
 const cors = require("cors");
-// import { cors } from "./middlewares/cors";
 
 const app = express();
 
-// cors package
-app.use(cors());
-
-// const origins = ["https://capsuleverse.com"];
-const origins = ["https://capsuleverse-test.web.app"];
+const origins = [
+  "https://capsuleverse.com",
+  "https://capsuleverse-test.web.app",
+];
+app.use(cors({ origins }));
 
 app.get("/api/capsule-list/v1", function (req, res, next) {
   const origin = req.headers.origin;

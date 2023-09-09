@@ -16,6 +16,7 @@ const app = express();
 // CORS settings
 
 const origins = [
+  "http://localhost:4200",
   "https://capsuleverse.com",
   "https://capsuleverse-test.web.app",
 ];

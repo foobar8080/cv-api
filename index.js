@@ -1,7 +1,9 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = __importDefault(require("express"));
 var get_route_1 = require("./get.route");
@@ -10,17 +12,18 @@ var app = (0, express_1.default)();
 // ===================== 0
 // CORS settings
 var origins = [
-    "https://capsuleverse.com",
-    "https://capsuleverse-test.web.app",
+  "http://localhost:4200",
+  "https://capsuleverse.com",
+  "https://capsuleverse-test.web.app",
 ];
 app.use(cors({ origins: origins }));
 // Allow unauthorized users to use this route only if they make a request to it from a client site
 app.get("/api/capsule-list/v1", function (req, res, next) {
-    var origin = req.headers.origin;
-    if (!origin || !origins.includes(origin)) {
-        return res.status(403).send("Forbidden");
-    }
-    next();
+  var origin = req.headers.origin;
+  if (!origin || !origins.includes(origin)) {
+    return res.status(403).send("Forbidden");
+  }
+  next();
 });
 // ===================== 1
 /*
@@ -79,6 +82,8 @@ app.route("/api/chats/v1/:chatId").get(get_route_1.getChats);
 app.route("/api/users/v1").get(get_route_1.getUsers);
 app.route("/api/live-chat/v1").get(get_route_1.getLiveChat);
 var httpServer = app.listen(9000, function () {
-    console.log("HTTP REST API Server running at http://localhost:" +
-        httpServer.address().port);
+  console.log(
+    "HTTP REST API Server running at http://localhost:" +
+      httpServer.address().port
+  );
 });

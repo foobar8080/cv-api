@@ -21,7 +21,7 @@ export const getUsers = (req: Request, res: Response) => {
 };
 
 export const getChats = (req: Request, res: Response) => {
-  // http://localhost:9000/api/chats/v1/5033f88772:83ac211947/?offset=5&limit=7
+  // http://localhost:9000/api/chats/v1/3b333000be0f:83ac211947/?offset=5&limit=7
 
   const { chatId } = req.params;
   const { offset, limit } = req.query;

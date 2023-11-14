@@ -21,7 +21,7 @@ var getUsers = function (req, res) {
 };
 exports.getUsers = getUsers;
 var getChats = function (req, res) {
-    // http://localhost:9000/api/chats/v1/5033f88772:83ac211947/?offset=5&limit=7
+    // http://localhost:9000/api/chats/v1/3b333000be0f:83ac211947/?offset=5&limit=7
     var chatId = req.params.chatId;
     var _a = req.query, offset = _a.offset, limit = _a.limit;
     if (!offset || !offset || !limit)
